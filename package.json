@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/nguyenphucthienan/HeartYouAPI/issues"
   },
-  "homepage": "https://github.com/nguyenphucthienan/HeartYouAPI#readme"
+  "homepage": "https://github.com/nguyenphucthienan/HeartYouAPI#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  }
 }
