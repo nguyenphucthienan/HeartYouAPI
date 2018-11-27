@@ -7,6 +7,7 @@ const cors = require('cors');
 
 require('./models/Role');
 require('./models/User');
+require('./models/Question');
 require('./services/passport/passportLocal');
 require('./services/passport/passportJwt');
 require('./seeds/Seeds');
