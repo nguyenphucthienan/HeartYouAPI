@@ -4,6 +4,7 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 const roleController = require('../controllers/roleController');
+const questionController = require('../controllers/questionController');
 const { catchErrors } = require('../handlers/errorHandlers');
 
 const {
@@ -76,5 +77,25 @@ router.delete('/roles/:id',
   requireJwtAuth,
   requireRoles([RoleNames.ADMIN]),
   catchErrors(roleController.deleteRole));
+
+router.get('/questions/:id',
+  requireJwtAuth,
+  catchErrors(questionController.getQuestion));
+
+router.post('/questions',
+  requireJwtAuth,
+  catchErrors(questionController.createQuestion));
+
+router.post('/questions/:id/answer',
+  requireJwtAuth,
+  catchErrors(questionController.answerQuestion));
+
+router.post('/questions/:id/unanswer',
+  requireJwtAuth,
+  catchErrors(questionController.unanswerQuestion));
+
+router.delete('/questions/:id',
+  requireJwtAuth,
+  catchErrors(questionController.deleteQuestion));
 
 module.exports = router;
