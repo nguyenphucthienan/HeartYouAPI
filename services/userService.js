@@ -78,6 +78,24 @@ exports.generateTokenForUser = (user) => {
   );
 };
 
+exports.getFollowingList = id => (
+  User.findById(id)
+    .populate('following', '_id username firstName lastName photoUrl moodMessage')
+    .then(user => user.following)
+);
+
+exports.getFollowerList = id => (
+  User.find({ following: id })
+    .select({
+      _id: 1,
+      username: 1,
+      firstName: 1,
+      lastName: 1,
+      photoUrl: 1,
+      moodMessage: 1
+    })
+);
+
 exports.followUser = (id, userId, operator) => (
   User.findByIdAndUpdate(id,
     { [operator]: { following: userId } },

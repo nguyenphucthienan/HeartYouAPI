@@ -84,6 +84,20 @@ exports.deleteUser = async (req, res) => {
   return res.send(user);
 };
 
+exports.getFollowingList = async (req, res) => {
+  const { id } = req.params;
+
+  const followingList = await userService.getFollowingList(id);
+  return res.send(followingList);
+};
+
+exports.getFollowerList = async (req, res) => {
+  const { id } = req.params;
+
+  const followerList = await userService.getFollowerList(id);
+  return res.send(followerList);
+};
+
 exports.followUser = async (req, res) => {
   const { id: userId } = req.user;
   const { id } = req.params;

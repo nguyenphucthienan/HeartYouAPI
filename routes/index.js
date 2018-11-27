@@ -78,6 +78,9 @@ router.delete('/users/:id',
   requireRoles([RoleNames.ADMIN]),
   catchErrors(userController.deleteUser));
 
+router.get('/users/:id/following', userController.getFollowingList);
+router.get('/users/:id/followers', userController.getFollowerList);
+
 router.post('/users/:id/follow',
   requireJwtAuth,
   catchErrors(userController.followUser));
