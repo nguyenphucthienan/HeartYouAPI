@@ -113,6 +113,10 @@ router.post('/questions/:id/unanswer',
   requireJwtAuth,
   catchErrors(questionController.unanswerQuestion));
 
+router.post('/questions/:id/heart',
+  requireJwtAuth,
+  catchErrors(questionController.heartQuestion));
+
 router.delete('/questions/:id',
   requireJwtAuth,
   catchErrors(questionController.deleteQuestion));

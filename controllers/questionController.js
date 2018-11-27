@@ -153,6 +153,25 @@ exports.unanswerQuestion = async (req, res) => {
   return res.send(returnQuestion);
 };
 
+exports.heartQuestion = async (req, res) => {
+  const { id } = req.params;
+  const { id: userId } = req.user;
+
+  const question = await questionService.getQuestionById(id);
+
+  if (!question) {
+    return res.status(404).send();
+  }
+
+  const loves = question.hearts.map(obj => obj.toString());
+  const operator = loves.includes(userId) ? '$pull' : '$addToSet';
+
+  await questionService.heartQuestionById(id, userId, operator);
+
+  const returnQuestion = await questionService.getQuestionById(id);
+  return res.send(returnQuestion);
+};
+
 exports.deleteQuestion = async (req, res) => {
   const { id } = req.params;
   const { id: userId } = req.user;

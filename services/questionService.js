@@ -84,6 +84,12 @@ exports.unanswerQuestionById = id => (
   }, { new: true }).exec()
 );
 
+exports.heartQuestionById = (id, userId, operator) => (
+  Question.findByIdAndUpdate(id,
+    { [operator]: { hearts: userId } },
+    { new: true })
+);
+
 exports.deleteQuestionById = id => (
   Question.findByIdAndDelete(id).exec()
 );
