@@ -4,5 +4,6 @@ module.exports = {
   secretKey: process.env.SECRET_KEY,
   token: {
     expirationTime: process.env.TOKEN_EXPIRATION_TIME
-  }
+  },
+  corsWhitelist: [process.env.CORS_WHITELIST]
 };
