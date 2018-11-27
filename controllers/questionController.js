@@ -1,4 +1,30 @@
 const questionService = require('../services/questionService');
+const Pagination = require('../helpers/Pagination');
+
+exports.getNewsFeed = async (req, res) => {
+  const pageNumber = Math.max(0, parseInt(req.query.pageNumber, 10)) || 1;
+  const pageSize = parseInt(req.query.pageSize, 10) || 5;
+  const { following } = req.user;
+
+  const filterObj = {
+    answerer: { $in: following },
+    answered: true
+  };
+
+  const sortObj = {
+    answeredAt: -1
+  };
+
+  const users = await questionService.getNewsFeed(pageNumber, pageSize, filterObj, sortObj);
+  const totalItems = await questionService.countUsers(filterObj);
+
+  const data = {
+    items: users,
+    pagination: new Pagination(pageNumber, pageSize, totalItems)
+  };
+
+  return res.send(data);
+};
 
 exports.getQuestion = async (req, res) => {
   const { id } = req.params;

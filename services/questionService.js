@@ -1,6 +1,38 @@
 const mongoose = require('mongoose');
 const Question = mongoose.model('Question');
 
+exports.getNewsFeed = (pageNumber, pageSize, filterObj, sortObj) => (
+  Question.aggregate([
+    { $match: filterObj },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'answerer',
+        foreignField: '_id',
+        as: 'answerer'
+      },
+    },
+    { $unwind: '$answerer' },
+    {
+      $project: {
+        _id: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        username: 1,
+        firstName: 1,
+        lastName: 1,
+        photoUrl: 1,
+        'answerer._id': 1,
+        'answerer.username': 1,
+        'answerer.photoUrl': 1
+      }
+    },
+    { $sort: sortObj },
+    { $skip: (pageNumber - 1) * pageSize },
+    { $limit: pageSize }
+  ])
+);
+
 exports.getQuestionById = (id) => {
   const _id = mongoose.Types.ObjectId(id);
   return Question.findById({ _id })

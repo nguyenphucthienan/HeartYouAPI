@@ -98,4 +98,8 @@ router.delete('/questions/:id',
   requireJwtAuth,
   catchErrors(questionController.deleteQuestion));
 
+router.get('/users/:id/news_feed',
+  requireJwtAuth,
+  catchErrors(questionController.getNewsFeed));
+
 module.exports = router;

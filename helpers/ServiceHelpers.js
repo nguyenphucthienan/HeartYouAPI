@@ -24,6 +24,24 @@ class ServiceHelpers {
       }, {});
   }
 
+  static createFilterObject(filterString) {
+    if (!filterString) {
+      return {};
+    }
+
+    return filterString.split('|')
+      .reduce((filterObj, item) => {
+        const splitedItem = item.split(':');
+        const key = splitedItem[0];
+        const value = splitedItem[1];
+
+        const newFilterObject = { ...filterObj };
+        newFilterObject[key] = value;
+
+        return newFilterObject;
+      }, {});
+  }
+
   static createSortObject(sortString) {
     if (!sortString) {
       return { createdAt: -1 };
