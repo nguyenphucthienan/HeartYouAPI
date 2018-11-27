@@ -2,12 +2,16 @@ const express = require('express');
 const router = express.Router();
 
 const authController = require('../controllers/authController');
+const roleController = require('../controllers/roleController');
 const { catchErrors } = require('../handlers/errorHandlers');
 
 const {
   requireLocalAuth,
   requireJwtAuth
 } = require('../middlewares/passportAuth');
+
+const requireRoles = require('../middlewares/requireRoles');
+const RoleNames = require('../constants/RoleNames');
 
 router.get('/', (req, res) => {
   res.send({ hi: 'there' });
@@ -26,5 +30,25 @@ router.post('/auth/login',
 router.get('/auth/me',
   requireJwtAuth,
   catchErrors(authController.currentUser));
+
+router.get('/roles',
+  requireJwtAuth,
+  requireRoles([RoleNames.ADMIN]),
+  catchErrors(roleController.getRoles));
+
+router.get('/roles/:id',
+  requireJwtAuth,
+  requireRoles([RoleNames.ADMIN]),
+  catchErrors(roleController.getRole));
+
+router.post('/roles',
+  requireJwtAuth,
+  requireRoles([RoleNames.ADMIN]),
+  catchErrors(roleController.createRole));
+
+router.delete('/roles/:id',
+  requireJwtAuth,
+  requireRoles([RoleNames.ADMIN]),
+  catchErrors(roleController.deleteRole));
 
 module.exports = router;
