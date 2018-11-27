@@ -33,6 +33,26 @@ router.get('/auth/me',
   requireJwtAuth,
   catchErrors(authController.currentUser));
 
+router.get('/roles',
+  requireJwtAuth,
+  requireRoles([RoleNames.ADMIN]),
+  catchErrors(roleController.getRoles));
+
+router.get('/roles/:id',
+  requireJwtAuth,
+  requireRoles([RoleNames.ADMIN]),
+  catchErrors(roleController.getRole));
+
+router.post('/roles',
+  requireJwtAuth,
+  requireRoles([RoleNames.ADMIN]),
+  catchErrors(roleController.createRole));
+
+router.delete('/roles/:id',
+  requireJwtAuth,
+  requireRoles([RoleNames.ADMIN]),
+  catchErrors(roleController.deleteRole));
+
 router.get('/users',
   requireJwtAuth,
   requireRoles([RoleNames.ADMIN]),
@@ -58,25 +78,13 @@ router.delete('/users/:id',
   requireRoles([RoleNames.ADMIN]),
   catchErrors(userController.deleteUser));
 
-router.get('/roles',
+router.post('/users/:id/follow',
   requireJwtAuth,
-  requireRoles([RoleNames.ADMIN]),
-  catchErrors(roleController.getRoles));
+  catchErrors(userController.followUser));
 
-router.get('/roles/:id',
+router.get('/users/:id/news_feed',
   requireJwtAuth,
-  requireRoles([RoleNames.ADMIN]),
-  catchErrors(roleController.getRole));
-
-router.post('/roles',
-  requireJwtAuth,
-  requireRoles([RoleNames.ADMIN]),
-  catchErrors(roleController.createRole));
-
-router.delete('/roles/:id',
-  requireJwtAuth,
-  requireRoles([RoleNames.ADMIN]),
-  catchErrors(roleController.deleteRole));
+  catchErrors(questionController.getNewsFeed));
 
 router.get('/questions/:id',
   requireJwtAuth,
@@ -97,9 +105,5 @@ router.post('/questions/:id/unanswer',
 router.delete('/questions/:id',
   requireJwtAuth,
   catchErrors(questionController.deleteQuestion));
-
-router.get('/users/:id/news_feed',
-  requireJwtAuth,
-  catchErrors(questionController.getNewsFeed));
 
 module.exports = router;

@@ -17,11 +17,12 @@ exports.getNewsFeed = (pageNumber, pageSize, filterObj, sortObj) => (
       $project: {
         _id: 1,
         createdAt: 1,
-        updatedAt: 1,
-        username: 1,
-        firstName: 1,
-        lastName: 1,
-        photoUrl: 1,
+        answered: 1,
+        answeredAt: 1,
+        questionBody: 1,
+        answerBody: 1,
+        hearts: 1,
+        heartCount: { $size: '$hearts' },
         'answerer._id': 1,
         'answerer.username': 1,
         'answerer.photoUrl': 1
@@ -54,6 +55,11 @@ exports.createQuestion = (question) => {
   const newQuestion = new Question({ ...question });
   return newQuestion.save();
 };
+
+exports.countQuestions = filterObj => (
+  Question.find(filterObj)
+    .then(question => question.length)
+);
 
 exports.answerQuestionById = (id, answerBody) => (
   Question.findByIdAndUpdate(id, {

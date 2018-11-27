@@ -83,3 +83,22 @@ exports.deleteUser = async (req, res) => {
 
   return res.send(user);
 };
+
+exports.followUser = async (req, res) => {
+  const { id: userId } = req.user;
+  const { id } = req.params;
+
+  const user = await userService.getUserById(id);
+
+  if (!user) {
+    return res.status(404).send();
+  }
+
+  const followings = user.following.map(obj => obj.toString());
+  const operator = followings.includes(userId) ? '$pull' : '$addToSet';
+
+  const updatedUser = await userService.followUser(userId, id, operator);
+
+  const returnUser = _.omit(updatedUser.toObject(), ['password']);
+  return res.send(returnUser);
+};

@@ -15,11 +15,11 @@ exports.getNewsFeed = async (req, res) => {
     answeredAt: -1
   };
 
-  const users = await questionService.getNewsFeed(pageNumber, pageSize, filterObj, sortObj);
-  const totalItems = await questionService.countUsers(filterObj);
+  const questions = await questionService.getNewsFeed(pageNumber, pageSize, filterObj, sortObj);
+  const totalItems = await questionService.countQuestions(filterObj);
 
   const data = {
-    items: users,
+    items: questions,
     pagination: new Pagination(pageNumber, pageSize, totalItems)
   };
 
@@ -39,7 +39,7 @@ exports.getQuestion = async (req, res) => {
 };
 
 exports.createQuestion = async (req, res) => {
-  const userId = req.user.id;
+  const { id: userId } = req.user;
   const newQuestion = { ...req.body, questioner: userId };
 
   const question = await questionService.createQuestion(newQuestion);

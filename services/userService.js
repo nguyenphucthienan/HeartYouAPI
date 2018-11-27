@@ -77,3 +77,9 @@ exports.generateTokenForUser = (user) => {
     { expiresIn: config.token.expirationTime }
   );
 };
+
+exports.followUser = (id, userId, operator) => (
+  User.findByIdAndUpdate(id,
+    { [operator]: { following: userId } },
+    { new: true })
+);
