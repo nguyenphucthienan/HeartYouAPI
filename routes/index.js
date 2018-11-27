@@ -89,6 +89,14 @@ router.get('/users/:id/news_feed',
   requireJwtAuth,
   catchErrors(questionController.getNewsFeed));
 
+router.get('/users/:id/unanswered_questions',
+  requireJwtAuth,
+  catchErrors(questionController.getUnansweredQuestions));
+
+router.get('/users/:id/answered_questions',
+  requireJwtAuth,
+  catchErrors(questionController.getAnsweredQuestions));
+
 router.get('/questions/:id',
   requireJwtAuth,
   catchErrors(questionController.getQuestion));

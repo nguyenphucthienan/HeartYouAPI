@@ -32,7 +32,8 @@ exports.getUser = async (req, res) => {
     return res.status(404).send();
   }
 
-  return res.send(user);
+  const returnUser = _.omit(user.toObject(), ['password']);
+  return res.send(returnUser);
 };
 
 exports.createUser = async (req, res) => {

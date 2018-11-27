@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Question = mongoose.model('Question');
 
-exports.getNewsFeed = (pageNumber, pageSize, filterObj, sortObj) => (
+exports.getQuestions = (pageNumber, pageSize, filterObj, sortObj) => (
   Question.aggregate([
     { $match: filterObj },
     {

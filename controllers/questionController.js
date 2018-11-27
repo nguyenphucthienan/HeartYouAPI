@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const questionService = require('../services/questionService');
 const Pagination = require('../helpers/Pagination');
 
@@ -15,7 +16,62 @@ exports.getNewsFeed = async (req, res) => {
     answeredAt: -1
   };
 
-  const questions = await questionService.getNewsFeed(pageNumber, pageSize, filterObj, sortObj);
+  const questions = await questionService.getQuestions(pageNumber, pageSize, filterObj, sortObj);
+  const totalItems = await questionService.countQuestions(filterObj);
+
+  const data = {
+    items: questions,
+    pagination: new Pagination(pageNumber, pageSize, totalItems)
+  };
+
+  return res.send(data);
+};
+
+exports.getUnansweredQuestions = async (req, res) => {
+  const pageNumber = Math.max(0, parseInt(req.query.pageNumber, 10)) || 1;
+  const pageSize = parseInt(req.query.pageSize, 10) || 5;
+  const { id } = req.params;
+  const { id: userId } = req.user;
+
+  if (id !== userId) {
+    return res.status(400).send();
+  }
+
+  const filterObj = {
+    answerer: mongoose.Types.ObjectId(userId),
+    answered: false
+  };
+
+  const sortObj = {
+    createdAt: -1
+  };
+
+  const questions = await questionService.getQuestions(pageNumber, pageSize, filterObj, sortObj);
+  const totalItems = await questionService.countQuestions(filterObj);
+
+  const data = {
+    items: questions,
+    pagination: new Pagination(pageNumber, pageSize, totalItems)
+  };
+
+  return res.send(data);
+};
+
+exports.getAnsweredQuestions = async (req, res) => {
+  const pageNumber = Math.max(0, parseInt(req.query.pageNumber, 10)) || 1;
+  const pageSize = parseInt(req.query.pageSize, 10) || 5;
+  const { id } = req.params;
+
+  const filterObj = {
+    answerer: mongoose.Types.ObjectId(id),
+    answered: true
+  };
+
+  const sortObj = {
+    createdAt: -1
+  };
+
+  const questions = await questionService.getQuestions(pageNumber, pageSize, filterObj, sortObj);
   const totalItems = await questionService.countQuestions(filterObj);
 
   const data = {
