@@ -5,6 +5,7 @@ const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 const roleController = require('../controllers/roleController');
 const questionController = require('../controllers/questionController');
+const uploadController = require('../controllers/uploadController');
 const { catchErrors } = require('../handlers/errorHandlers');
 
 const {
@@ -120,5 +121,9 @@ router.post('/questions/:id/heart',
 router.delete('/questions/:id',
   requireJwtAuth,
   catchErrors(questionController.deleteQuestion));
+
+router.post('/upload/photo',
+  requireJwtAuth,
+  uploadController.cloudinaryPhotoUpload);
 
 module.exports = router;
