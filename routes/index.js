@@ -126,4 +126,8 @@ router.post('/upload/photo',
   requireJwtAuth,
   uploadController.cloudinaryPhotoUpload);
 
+router.post('/upload/audio',
+  requireJwtAuth,
+  uploadController.cloudinaryAudioUpload);
+
 module.exports = router;
