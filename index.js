@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
+const cloudinary = require('cloudinary');
 
 require('./models/Role');
 require('./models/User');
@@ -30,6 +31,12 @@ const corsOptions = {
     }
   }
 };
+
+cloudinary.config({
+  cloud_name: config.cloudinary.cloudName,
+  api_key: config.cloudinary.apiKey,
+  api_secret: config.cloudinary.apiSecret
+});
 
 app.use(cors(corsOptions));
 
