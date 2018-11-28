@@ -19,12 +19,20 @@ const questionSchema = new Schema({
   answeredAt: {
     type: Date
   },
-  questionBody: {
+  questionText: {
     type: String,
     require: 'Question is required',
     trim: true
   },
-  answerBody: {
+  questionAudioUrl: {
+    type: String,
+    trim: true
+  },
+  answerText: {
+    type: String,
+    trim: true
+  },
+  answerAudioUrl: {
     type: String,
     trim: true
   },

@@ -106,7 +106,7 @@ exports.createQuestion = async (req, res) => {
 
 exports.answerQuestion = async (req, res) => {
   const { id } = req.params;
-  const { answerBody } = req.body;
+  const { answerText, answerAudioUrl } = req.body;
   const { id: userId } = req.user;
 
   const question = await questionService.getQuestionById(id);
@@ -119,7 +119,7 @@ exports.answerQuestion = async (req, res) => {
     return res.status(401).send();
   }
 
-  const answeredQuestion = await questionService.answerQuestionById(id, answerBody);
+  const answeredQuestion = await questionService.answerQuestionById(id, answerText, answerAudioUrl);
 
   if (!answeredQuestion) {
     return res.status(404).send();

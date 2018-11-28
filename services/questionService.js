@@ -19,8 +19,10 @@ exports.getQuestions = (pageNumber, pageSize, filterObj, sortObj) => (
         createdAt: 1,
         answered: 1,
         answeredAt: 1,
-        questionBody: 1,
-        answerBody: 1,
+        questionText: 1,
+        questionAudioUrl: 1,
+        answerText: 1,
+        answerAudioUrl: 1,
         hearts: 1,
         heartCount: { $size: '$hearts' },
         'answerer._id': 1,
@@ -40,9 +42,11 @@ exports.getQuestionById = (id) => {
     .select({
       _id: 1,
       answerer: 1,
-      questionBody: 1,
+      questionText: 1,
+      questionAudioUrl: 1,
       createdAt: 1,
-      answerBody: 1,
+      answerText: 1,
+      answerAudioUrl: 1,
       answered: 1,
       answeredAt: 1,
       hearts: 1
@@ -61,15 +65,26 @@ exports.countQuestions = filterObj => (
     .then(question => question.length)
 );
 
-exports.answerQuestionById = (id, answerBody) => (
-  Question.findByIdAndUpdate(id, {
+exports.answerQuestionById = (id, answerText, answerAudioUrl) => {
+  if (answerAudioUrl) {
+    return Question.findByIdAndUpdate(id, {
+      $set: {
+        answered: true,
+        answeredAt: Date.now(),
+        answerText,
+        answerAudioUrl
+      }
+    }, { new: true }).exec();
+  }
+
+  return Question.findByIdAndUpdate(id, {
     $set: {
       answered: true,
       answeredAt: Date.now(),
-      answerBody
+      answerText,
     }
-  }, { new: true }).exec()
-);
+  }, { new: true }).exec();
+};
 
 exports.unanswerQuestionById = id => (
   Question.findByIdAndUpdate(id, {
@@ -79,7 +94,8 @@ exports.unanswerQuestionById = id => (
     },
     $unset: {
       answeredAt: 1,
-      answerBody: 1
+      answerText: 1,
+      answerAudioUrl: 1
     }
   }, { new: true }).exec()
 );
