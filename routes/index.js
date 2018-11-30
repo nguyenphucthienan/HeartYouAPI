@@ -90,11 +90,11 @@ router.get('/users/:id/news_feed',
   requireJwtAuth,
   catchErrors(questionController.getNewsFeed));
 
-router.get('/users/:id/unanswered_questions',
+router.get('/users/:id/unanswered-questions',
   requireJwtAuth,
   catchErrors(questionController.getUnansweredQuestions));
 
-router.get('/users/:id/answered_questions',
+router.get('/users/:id/answered-questions',
   requireJwtAuth,
   catchErrors(questionController.getAnsweredQuestions));
 

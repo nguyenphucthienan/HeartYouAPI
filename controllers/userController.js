@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const mongoose = require('mongoose');
 const userService = require('../services/userService');
 const Pagination = require('../helpers/Pagination');
 const ServiceHelpers = require('../helpers/ServiceHelpers');
@@ -86,17 +87,53 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.getFollowingList = async (req, res) => {
-  const { id } = req.params;
+  const pageNumber = Math.max(0, parseInt(req.query.pageNumber, 10)) || 1;
+  const pageSize = parseInt(req.query.pageSize, 10) || 5;
 
-  const followingList = await userService.getFollowingList(id);
-  return res.send(followingList);
+  const { id } = req.params;
+  const user = await userService.getUserById(id);
+
+  const filterObj = {
+    _id: { $in: user.following }
+  };
+
+  const sortObj = {
+    username: 1
+  };
+
+  const users = await userService.getUsers(pageNumber, pageSize, filterObj, sortObj);
+  const totalItems = await userService.countUsers(filterObj);
+
+  const data = {
+    items: users,
+    pagination: new Pagination(pageNumber, pageSize, totalItems)
+  };
+
+  return res.send(data);
 };
 
 exports.getFollowerList = async (req, res) => {
+  const pageNumber = Math.max(0, parseInt(req.query.pageNumber, 10)) || 1;
+  const pageSize = parseInt(req.query.pageSize, 10) || 5;
   const { id } = req.params;
 
-  const followerList = await userService.getFollowerList(id);
-  return res.send(followerList);
+  const filterObj = {
+    following: mongoose.Types.ObjectId(id)
+  };
+
+  const sortObj = {
+    username: 1
+  };
+
+  const users = await userService.getUsers(pageNumber, pageSize, filterObj, sortObj);
+  const totalItems = await userService.countUsers(filterObj);
+
+  const data = {
+    items: users,
+    pagination: new Pagination(pageNumber, pageSize, totalItems)
+  };
+
+  return res.send(data);
 };
 
 exports.followUser = async (req, res) => {
