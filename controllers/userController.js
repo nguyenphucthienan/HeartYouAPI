@@ -146,8 +146,8 @@ exports.followUser = async (req, res) => {
     return res.status(404).send();
   }
 
-  const followings = user.following.map(obj => obj.toString());
-  const operator = followings.includes(userId) ? '$pull' : '$addToSet';
+  const following = req.user.following.map(obj => obj.toString());
+  const operator = following.includes(id) ? '$pull' : '$addToSet';
 
   const updatedUser = await userService.followUser(userId, id, operator);
 
