@@ -23,6 +23,7 @@ exports.getUsers = (pageNumber, pageSize, filterObj, sortObj) => (
         firstName: 1,
         lastName: 1,
         photoUrl: 1,
+        moodMessage: 1,
         'roles._id': 1,
         'roles.name': 1,
       }
@@ -100,4 +101,38 @@ exports.followUser = (id, userId, operator) => (
   User.findByIdAndUpdate(id,
     { [operator]: { following: userId } },
     { new: true })
+);
+
+exports.searchUsers = username => (
+  User.aggregate([
+    {
+      $match: {
+        username: new RegExp(username, 'i')
+      }
+    },
+    {
+      $lookup: {
+        from: 'roles',
+        localField: 'roles',
+        foreignField: '_id',
+        as: 'roles'
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        username: 1,
+        firstName: 1,
+        lastName: 1,
+        photoUrl: 1,
+        moodMessage: 1,
+        'roles._id': 1,
+        'roles.name': 1,
+      }
+    },
+    { $sort: { username: 1 } },
+    { $limit: 10 }
+  ])
 );

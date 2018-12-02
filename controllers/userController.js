@@ -154,3 +154,16 @@ exports.followUser = async (req, res) => {
   const returnUser = _.omit(updatedUser.toObject(), ['password']);
   return res.send(returnUser);
 };
+
+exports.searchUsers = async (req, res) => {
+  const { username } = req.query;
+  const users = await userService.searchUsers(username);
+
+  const myUserId = mongoose.Types.ObjectId(req.user.id);
+  const returnUsers = users.filter((user) => {
+    const userId = mongoose.Types.ObjectId(user._id);
+    return !userId.equals(myUserId);
+  });
+
+  return res.send(returnUsers);
+};

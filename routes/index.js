@@ -59,6 +59,10 @@ router.get('/users',
   requireRoles([RoleNames.ADMIN]),
   catchErrors(userController.getUsers));
 
+router.get('/users/search',
+  requireJwtAuth,
+  catchErrors(userController.searchUsers));
+
 router.get('/users/:id',
   requireJwtAuth,
   requireRoles([RoleNames.ADMIN]),
@@ -79,8 +83,11 @@ router.delete('/users/:id',
   requireRoles([RoleNames.ADMIN]),
   catchErrors(userController.deleteUser));
 
-router.get('/users/:id/following', userController.getFollowingList);
-router.get('/users/:id/followers', userController.getFollowerList);
+router.get('/users/:id/following',
+  catchErrors(userController.getFollowingList));
+
+router.get('/users/:id/followers',
+  catchErrors(userController.getFollowerList));
 
 router.post('/users/:id/follow',
   requireJwtAuth,
