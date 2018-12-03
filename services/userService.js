@@ -56,6 +56,14 @@ exports.updateUserById = (id, user) => (
   User.findByIdAndUpdate(id, user, { new: true }).exec()
 );
 
+exports.editUserById = (id, user) => (
+  User.findByIdAndUpdate(
+    id,
+    { $set: user },
+    { new: true }
+  )
+);
+
 exports.deleteUserById = id => (
   User.findByIdAndDelete(id).exec()
 );

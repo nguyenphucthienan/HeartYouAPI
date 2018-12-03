@@ -74,6 +74,24 @@ exports.updateUser = async (req, res) => {
   return res.send(returnUser);
 };
 
+exports.editUserInfo = async (req, res) => {
+  const { id: userId } = req.user;
+  const { id } = req.params;
+
+  if (id !== userId) {
+    return res.status(400).send();
+  }
+
+  const user = await userService.editUserById(userId, req.body);
+
+  if (!user) {
+    return res.status(404).send();
+  }
+
+  const returnUser = _.omit(user.toObject(), 'password');
+  return res.send(returnUser);
+};
+
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
 

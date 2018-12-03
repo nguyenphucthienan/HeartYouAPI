@@ -65,7 +65,6 @@ router.get('/users/search',
 
 router.get('/users/:id',
   requireJwtAuth,
-  requireRoles([RoleNames.ADMIN]),
   catchErrors(userController.getUser));
 
 router.post('/users',
@@ -77,6 +76,10 @@ router.put('/users/:id',
   requireJwtAuth,
   requireRoles([RoleNames.ADMIN]),
   catchErrors(userController.updateUser));
+
+router.patch('/users/:id',
+  requireJwtAuth,
+  catchErrors(userController.editUserInfo));
 
 router.delete('/users/:id',
   requireJwtAuth,
@@ -93,7 +96,7 @@ router.post('/users/:id/follow',
   requireJwtAuth,
   catchErrors(userController.followUser));
 
-router.get('/users/:id/news_feed',
+router.get('/users/:id/news-feed',
   requireJwtAuth,
   catchErrors(questionController.getNewsFeed));
 
