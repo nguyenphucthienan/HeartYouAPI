@@ -68,7 +68,7 @@ exports.getAnsweredQuestions = async (req, res) => {
   };
 
   const sortObj = {
-    createdAt: -1
+    answeredAt: -1
   };
 
   const questions = await questionService.getQuestions(pageNumber, pageSize, filterObj, sortObj);
